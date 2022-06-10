@@ -12,9 +12,12 @@ def data_to_table(data):
     return [row.split(' — ') for row in data]
 
 
+def strip_data(data):
+    return [element.strip() for element in data]
+
+
 def parse_data(data):
-    parsed = re.findall("\D+\d*.*?", data)
-    parsed = [element.strip() for element in parsed]
+    parsed = strip_data(re.findall("\D+\d*.*?", data))
 
     try:
         army_index = [idx for idx, s in enumerate(parsed) if 'Особовий склад' in s][0]
