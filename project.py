@@ -16,10 +16,14 @@ def parse_data(data):
     parsed = re.findall("\D+\d*.*?", data)
     parsed = [element.strip() for element in parsed]
 
-    army_index = [idx for idx, s in enumerate(parsed) if 'Особовий склад' in s][0]
-    army_joined = ' '.join(parsed[army_index:]).replace(' ,', ',')
+    try:
+        army_index = [idx for idx, s in enumerate(parsed) if 'Особовий склад' in s][0]
+        army_joined = ' '.join(parsed[army_index:]).replace(' ,', ',')
 
-    return parsed[:army_index] + [army_joined]
+        return parsed[:army_index] + [army_joined]
+
+    except IndexError:
+        return parsed
 
 
 def load_data(url):
