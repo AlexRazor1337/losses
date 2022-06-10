@@ -1,5 +1,15 @@
 import requests, re
 from lxml import html
+from tabulate import tabulate
+
+
+def print_table(data, date):
+    headers = ['Category', f'Amount of losses ({date})']
+    print(tabulate(data, headers, tablefmt='grid'))
+
+
+def data_to_table(data):
+    return [row.split(' — ') for row in data]
 
 
 def parse_data(data):
@@ -24,7 +34,8 @@ def main():
     URL = 'https://index.minfin.com.ua/ua/russian-invading/casualties/'
     data, date = load_data(URL)
     data = parse_data(data)
-    print(data)
+    print_table(data_to_table(data), date)
+
 
 if __name__ == "__main__":
     main()
