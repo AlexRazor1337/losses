@@ -3,8 +3,7 @@ from lxml import html
 from tabulate import tabulate
 
 
-def print_table(data, date):
-    headers = ['Category', f'Amount of losses ({date})']
+def print_table(headers, data):
     print(tabulate(data, headers, tablefmt='grid'))
 
 
@@ -40,8 +39,10 @@ def load_data(url):
 def main():
     URL = 'https://index.minfin.com.ua/ua/russian-invading/casualties/'
     data, date = load_data(URL)
-    data = parse_data(data)
-    print_table(data_to_table(data), date)
+    data = data_to_table(parse_data(data))
+
+    headers = ['Category', f'Amount of losses ({date})']
+    print_table(headers, data)
 
 
 if __name__ == "__main__":
