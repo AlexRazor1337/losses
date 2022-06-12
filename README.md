@@ -24,15 +24,15 @@ If you run the script with image generation mode you'll get something like this:
 Console stats output:  
 1. Install Python 3.
 2. Run `pip install -r requirements.txt` to install dependencies.
-3. Run `python project.py`  
+3. Run `python losses.py`  
 
 
 Generating image:  
 1. Install Python 3.
 2. Run `pip install -r requirements.txt` to install dependencies.
-3. Run `python project.py -i`. This will generate config file.
+3. Run `python losses.py -i`. This will generate config file.
 4. Edit `config.json`, specifying resource files and font sizes.
-5. Run `python project.py -i` again. This will produce `result.jpg` file.
+5. Run `python losses.py -i` again. This will produce `result.jpg` file.
 
 Config file example:
 ```json
