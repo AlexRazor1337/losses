@@ -39,9 +39,12 @@ Config file example:
 {
     "background_path": "./resources/image.jpg",
     "font_path": "./resources/font.ttf",
-    "font_size": 25,
-    "header_font_size": 32,
-    "header_text": "Протягом 24.02-%s\n орієнтовані втрати противника склали:"
+    "font_size": 24,
+    "text_color": "white",
+    "header_font_size": 34,
+    "header_text": "Протягом 24.02-%s\n орієнтовані втрати противника склали:",
+    "header_color": "yellow",
+    "tint_amount": 0.35
 }
 ```
 **NOTE:** `header_text` must contain `%s` for the current date.
