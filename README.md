@@ -37,7 +37,7 @@ Generating image:
 Config file example:
 ```json
 {
-    "background_path": "./resources/frsunflower_yellow_field_1537623-image-kybcm7vy.jpg",
+    "background_path": "./resources/image.jpg",
     "font_path": "./resources/font.ttf",
     "font_size": 25,
     "header_font_size": 32,
