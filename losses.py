@@ -13,12 +13,12 @@ def tint_image(img, factor):
     return enhancer.enhance(factor)
 
 
-def draw_text_on_image(data, date, background_path, font_path, font_size, header_font_size, header_text):
+def draw_text_on_image(data, date, background_path, font_path, font_size, header_font_size, header_text, text_color='white', header_color='yellow'):
     HEADER_TEXT = header_text % date
-    HEADER_COLOR = 'yellow' # TODO make it configurable
+    HEADER_COLOR = header_color  # TODO make it configurable
     HIGHLIGHT_COLOR = (255, 40, 0)
     TINT_AMOUNT = 0.35
-    TEXT_COLOR = 'white'
+    TEXT_COLOR = text_color
 
     img = tint_image(Image.open(background_path), TINT_AMOUNT)
     draw = ImageDraw.Draw(img)
@@ -29,22 +29,57 @@ def draw_text_on_image(data, date, background_path, font_path, font_size, header
     center_x, center_y = img.size[0] / 2, img.size[1] / 2
     start_y = center_y - ((len(data) + 1) * font_size) / 2
 
-    draw.text((center_x - draw.textsize(HEADER_TEXT, font=header_font)[0] / 2, start_y - 3 * header_font_size), HEADER_TEXT, font=header_font, align='center', fill=HEADER_COLOR)
+    draw.text(
+        (center_x - draw.textsize(HEADER_TEXT, font=header_font)[0] / 2, start_y - 3 * header_font_size),
+        HEADER_TEXT,
+        font=header_font,
+        align='center',
+        fill=HEADER_COLOR
+    )
     # iterate over data and draw each line of text
     for i, line in enumerate(data):
         text_width = draw.textsize(line[0], font=font)[0]
-        draw.text((center_x - text_width - 10, start_y + i * font_size), line[0] + ':', font=font, align='right', fill=TEXT_COLOR)
+        draw.text(
+            (center_x - text_width - 10, start_y + i * font_size),
+            line[0] + ':',
+            font=font,
+            align='right',
+            fill=TEXT_COLOR
+        )
 
         if ', ' in line[1]:
             for j, sub_line in enumerate(line[1].split(', ')):
-                draw.text((center_x + 10, start_y + i * font_size + j * font_size), sub_line.split('(+')[0], font=font, align='left', fill=TEXT_COLOR)
+                draw.text(
+                    (center_x + 10, start_y + i * font_size + j * font_size),
+                    sub_line.split('(+')[0],
+                    font=font,
+                    align='left',
+                    fill=TEXT_COLOR
+                )
                 if '(+' in sub_line:
-                    draw.text((center_x + 10 + draw.textsize(sub_line.split('(+')[0], font=font)[0], start_y + i * font_size + j * font_size), '(+' + sub_line.split('(+')[1], font=font, align='left', fill=HIGHLIGHT_COLOR)
+                    draw.text(
+                        (center_x + 10 + draw.textsize(sub_line.split('(+')[0], font=font)[0], start_y + i * font_size + j * font_size),
+                        '(+' + sub_line.split('(+')[1],
+                        font=font,
+                        align='left',
+                        fill=HIGHLIGHT_COLOR
+                    )
         else:
-            draw.text((center_x + 10, start_y + i * font_size), line[1].split('(+')[0], font=font, align='left', fill=TEXT_COLOR)
+            draw.text(
+                (center_x + 10, start_y + i * font_size),
+                line[1].split('(+')[0],
+                font=font,
+                align='left',
+                fill=TEXT_COLOR
+            )
             if '(+' in line[1]:
-                draw.text((center_x + 10 + draw.textsize(line[1].split('(+')[0], font=font)[0], start_y + i * font_size), '(+' + line[1].split('(+')[-1], font=font, align='left', fill=HIGHLIGHT_COLOR)
-
+                draw.text(
+                    (center_x + 10 + draw.textsize(line[1].split('(+')[0], font=font)[0], start_y + i * font_size),
+                    '(+' + line[1].split('(+')[-1],
+                    font=font,
+                    align='left',
+                    fill=HIGHLIGHT_COLOR
+                )
 
     img.save('./result.jpg')
 
@@ -62,10 +97,10 @@ def strip_data(data):
 
 
 def parse_data(data):
-    result = re.findall("\D+\d*.*?[\s\(.?\d+\)]?", data)
+    result = re.findall('\D+\d*.*?[\s\(.?\d+\)]?', data)
     for i in range(len(result)):
         if '(+' in result[i]:
-            result[i-1] += result[i]
+            result[i - 1] += result[i]
             result[i] = ''
 
     parsed = strip_data(result)
@@ -98,16 +133,29 @@ def main():
         try:
             with open('./config.json', encoding='utf8') as config_file:
                 config = json.load(config_file)
-                draw_text_on_image(data, date, config.get('background_path', './resources/image.jpeg'), config.get('font_path', './resources/font.ttf'), config.get('font_size', 30), config.get('header_font_size', 46), config.get('header_text', 'Протягом 24.02-%s\n орієнтовані втрати противника склали:'))
+                draw_text_on_image(data, date, **config)
         except FileNotFoundError:
             print('Config file not found, creating new.')
             # create config.json file
             with open('./config.json', 'w', encoding='utf8') as config_file:
-                json.dump({'background_path': './resources/image.jpeg', 'font_path': './resources/font.ttf', 'font_size': 30, 'header_font_size': 46, 'header_text': 'Протягом 24.02-%s\n орієнтовані втрати противника склали:'}, config_file, indent=4, ensure_ascii=False)
+                json.dump(
+                    {
+                        'background_path': './resources/image.jpeg',
+                        'font_path': './resources/font.ttf',
+                        'font_size': 30,
+                        'header_font_size': 46,
+                        'header_text': 'Протягом 24.02-%s\n орієнтовані втрати противника склали:',
+                        'text_color': 'white',
+                        'header_color': 'yellow'
+                    },
+                    config_file,
+                    indent=4,
+                    ensure_ascii=False,
+                )
 
     else:
         print_table(['Category', f'Amount of losses ({date})'], data)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
