@@ -1,4 +1,4 @@
-from project import data_to_table, parse_data, strip_data
+from losses import data_to_table, parse_data, strip_data
 
 
 def test_data_to_table():
