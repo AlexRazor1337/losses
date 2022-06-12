@@ -15,7 +15,7 @@ def tint_image(img, factor):
 
 def draw_text_on_image(data, date, background_path, font_path, font_size, header_font_size, header_text):
     HEADER_TEXT = header_text % date
-    HEADER_COLOR = 'yellow'
+    HEADER_COLOR = 'yellow' # TODO make it configurable
     HIGHLIGHT_COLOR = (255, 40, 0)
     TINT_AMOUNT = 0.35
     TEXT_COLOR = 'white'
