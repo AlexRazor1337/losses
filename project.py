@@ -12,11 +12,17 @@ def data_to_table(data):
 
 
 def strip_data(data):
-    return [element.strip() for element in data]
+    return [element.strip() for element in data if element.strip()]
 
 
 def parse_data(data):
-    parsed = strip_data(re.findall("\D+\d*.*?", data))
+    result = re.findall("\D+\d*.*?[\s\(.?\d+\)]?", data)
+    for i in range(len(result)):
+        if '(+' in result[i]:
+            result[i-1] += result[i]
+            result[i] = ''
+
+    parsed = strip_data(result)
 
     try:
         army_index = [idx for idx, s in enumerate(parsed) if 'Особовий склад' in s][0]
@@ -31,7 +37,7 @@ def parse_data(data):
 def load_data(url):
     page = requests.get(url)
     tree = html.fromstring(page.content)
-    data = tree.xpath('//ul[@class="see-also"]/li[@class="gold"][1]/div[@class="casualties"]/div/ul/li//text()[not(parent::small)]')
+    data = tree.xpath('//ul[@class="see-also"]/li[@class="gold"][1]/div[@class="casualties"]/div/ul/li//text()')
     date = tree.xpath('//ul[@class="see-also"]/li[@class="gold"][1]/span[@class="black"]/text()')[0]
     return ''.join(data).replace('\xa0', ' '), date
 
@@ -40,7 +46,6 @@ def main():
     URL = 'https://index.minfin.com.ua/ua/russian-invading/casualties/'
     data, date = load_data(URL)
     data = data_to_table(parse_data(data))
-
     headers = ['Category', f'Amount of losses ({date})']
     print_table(headers, data)
 
