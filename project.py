@@ -15,8 +15,10 @@ def tint_image(img, factor):
 
 def draw_text_on_image(data, date, background_path, font_path, font_size, header_font_size, header_text):
     HEADER_TEXT = header_text % date
+    HIGHLIGHT_COLOR = (255, 40, 0)
+    TINT_AMOUNT = 0.35
 
-    img = tint_image(Image.open(background_path), 0.4)
+    img = tint_image(Image.open(background_path), TINT_AMOUNT)
     draw = ImageDraw.Draw(img)
 
     font = ImageFont.truetype(font_path, font_size)
@@ -28,7 +30,6 @@ def draw_text_on_image(data, date, background_path, font_path, font_size, header
     draw.text((center_x - draw.textsize(HEADER_TEXT, font=header_font)[0] / 2, start_y - 3 * header_font_size), HEADER_TEXT, font=header_font, align='center', fill='yellow')
     # iterate over data and draw each line of text
     for i, line in enumerate(data):
-
         text_width = draw.textsize(line[0], font=font)[0]
         draw.text((center_x - text_width - 10, start_y + i * font_size), line[0] + ':', font=font, align='right')
 
@@ -36,11 +37,11 @@ def draw_text_on_image(data, date, background_path, font_path, font_size, header
             for j, sub_line in enumerate(line[1].split(', ')):
                 draw.text((center_x + 10, start_y + i * font_size + j * font_size), sub_line.split('(+')[0], font=font, align='left')
                 if '(+' in sub_line:
-                    draw.text((center_x + 10 + draw.textsize(sub_line.split('(+')[0], font=font)[0], start_y + i * font_size + j * font_size), '(+' + sub_line.split('(+')[1], font=font, align='left', fill='red')
+                    draw.text((center_x + 10 + draw.textsize(sub_line.split('(+')[0], font=font)[0], start_y + i * font_size + j * font_size), '(+' + sub_line.split('(+')[1], font=font, align='left', fill=HIGHLIGHT_COLOR)
         else:
             draw.text((center_x + 10, start_y + i * font_size), line[1].split('(+')[0], font=font, align='left')
             if '(+' in line[1]:
-                draw.text((center_x + 10 + draw.textsize(line[1].split('(+')[0], font=font)[0], start_y + i * font_size), '(+' + line[1].split('(+')[-1], font=font, align='left', fill='red')
+                draw.text((center_x + 10 + draw.textsize(line[1].split('(+')[0], font=font)[0], start_y + i * font_size), '(+' + line[1].split('(+')[-1], font=font, align='left', fill=HIGHLIGHT_COLOR)
 
 
     img.save('./result.jpg')
