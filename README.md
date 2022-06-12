@@ -6,7 +6,7 @@ You can watch the data in the console or generate an image with this. For this y
 
 For the image making part, you'll have a file `config.json` created when you use script for creating image for the first time. Detailed description of the file and usage can be found down bellow.
 
-The data comes from the [Ministry of Finance website](https://index.minfin.com.ua/ua/russian-invading/casualties/). Script parses, strips and prepares it to be printed as table or writed on image.
+The data comes from the [Ministry of Finance website](https://index.minfin.com.ua/ua/russian-invading/casualties/). Script parses, strips and prepares it to be printed as table or written on image.
 
 This script was made as a final project of [CS50’s Introduction to Programming with Python](https://cs50.harvard.edu/python/2022/project/).
 
