@@ -13,11 +13,11 @@ def tint_image(img, factor):
     return enhancer.enhance(factor)
 
 
-def draw_text_on_image(data, date, background_path, font_path, font_size, header_font_size, header_text, text_color='white', header_color='yellow'):
+def draw_text_on_image(data, date, background_path, font_path, font_size, header_font_size, header_text, text_color='white', header_color='yellow', tint_amount=0.35):
     HEADER_TEXT = header_text % date
     HEADER_COLOR = header_color  # TODO make it configurable
     HIGHLIGHT_COLOR = (255, 40, 0)
-    TINT_AMOUNT = 0.35
+    TINT_AMOUNT = tint_amount
     TEXT_COLOR = text_color
 
     img = tint_image(Image.open(background_path), TINT_AMOUNT)
@@ -146,7 +146,8 @@ def main():
                         'header_font_size': 46,
                         'header_text': 'Протягом 24.02-%s\n орієнтовані втрати противника склали:',
                         'text_color': 'white',
-                        'header_color': 'yellow'
+                        'header_color': 'yellow',
+                        'tint_amount': 0.35
                     },
                     config_file,
                     indent=4,
